@@ -16,7 +16,4 @@ export default defineNuxtConfig({
     '~/plugins/axios.ts',
     '~/plugins/antd.ts',
   ],
-  build: {
-    transpile: ['ant-design-vue']
-  },
 })
