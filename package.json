@@ -1,0 +1,33 @@
+{
+	"name": "nuxt-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare",
+		"test": "vitest",
+		"test:unit": "vitest run",
+		"test:coverage": "vitest run --coverage",
+		"test:e2e": "playwright test",
+		"test:e2e:ui": "playwright test --ui",
+		"prepare:e2e": "playwright install --with-deps"
+	},
+	"dependencies": {
+		"nuxt": "^3.16.2",
+		"vue": "^3.5.13",
+		"vue-router": "^4.5.0"
+	},
+	"devDependencies": {
+		"@nuxt/test-utils": "^3.17.2",
+		"@playwright/test": "^1.51.1",
+		"@unocss/nuxt": "^66.1.0-beta.11",
+		"@vue/test-utils": "^2.4.6",
+		"happy-dom": "^17.4.4",
+		"playwright": "^1.51.1",
+		"unocss": "^66.1.0-beta.11",
+		"vitest": "^3.1.1"
+	}
+}
