@@ -1,5 +1,4 @@
-import { defineConfig } from 'unocss'
-import { presetUno, presetAttributify, presetIcons } from 'unocss'
+import { defineConfig, presetAttributify, presetIcons, presetUno } from 'unocss'
 
 export default defineConfig({
   presets: [
@@ -11,7 +10,7 @@ export default defineConfig({
   theme: {
     colors: {
       // You can define custom colors here
-    }
+    },
   },
   // Custom shortcuts for frequently used utility combinations
   shortcuts: {
@@ -20,5 +19,5 @@ export default defineConfig({
   // Custom rules
   rules: [
     // You can define custom rules here
-  ]
-}) 
+  ],
+})
