@@ -1,9 +1,9 @@
-// @vitest-environment happy-dom
-import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
+// @vitest-environment happy-dom
+import { describe, expect, it } from 'vitest'
 import Button from '../../components/Button.vue'
 
-describe('Button', () => {
+describe('button', () => {
   it('renders correctly', () => {
     const wrapper = mount(Button)
     expect(wrapper.text()).toBe('Button')
@@ -12,8 +12,8 @@ describe('Button', () => {
   it('renders slot content', () => {
     const wrapper = mount(Button, {
       slots: {
-        default: 'Click me'
-      }
+        default: 'Click me',
+      },
     })
     expect(wrapper.text()).toBe('Click me')
   })
@@ -29,9 +29,9 @@ describe('Button', () => {
   it('applies full width class when block prop is true', () => {
     const wrapper = mount(Button, {
       props: {
-        block: true
-      }
+        block: true,
+      },
     })
     expect(wrapper.classes()).toContain('w-full')
   })
-}) 
+})
