@@ -7,6 +7,7 @@
           <NuxtLink to="/" class="hover:text-blue-200">首页</NuxtLink>
           <NuxtLink to="/api-example" class="hover:text-blue-200">API 示例</NuxtLink>
           <NuxtLink to="/buttons" class="hover:text-blue-200">按钮组件</NuxtLink>
+          <NuxtLink to="/antd-demo" class="hover:text-blue-200">Ant Design</NuxtLink>
           <a href="https://github.com/nuxt/nuxt" target="_blank" class="hover:text-blue-200 flex items-center">
             <div class="i-mdi-github mr-1"></div>
             GitHub

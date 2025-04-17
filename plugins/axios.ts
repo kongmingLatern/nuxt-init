@@ -10,7 +10,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     }
-  })
+  })       
 
   // 请求拦截器
   service.interceptors.request.use(

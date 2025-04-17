@@ -4,5 +4,11 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: [
     '@unocss/nuxt'
-  ]
+  ],
+  css: [
+    'ant-design-vue/dist/reset.css'
+  ],
+  build: {
+    transpile: ['ant-design-vue']
+  }
 })
