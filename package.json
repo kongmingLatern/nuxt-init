@@ -18,8 +18,12 @@
     "prepare:e2e": "playwright install --with-deps"
   },
   "dependencies": {
+    "@element-plus/nuxt": "^1.1.1",
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
     "axios": "^1.8.4",
+    "element-plus": "^2.9.7",
     "nuxt": "^3.16.2",
+    "sass-embedded": "^1.86.3",
     "vue": "^3.5.13",
     "vue-router": "^4.5.0"
   },
