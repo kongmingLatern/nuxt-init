@@ -11,9 +11,4 @@ export default defineNuxtConfig({
     importStyle: 'scss',
     themes: ['dark'],
   },
-  vite: {
-    vueJsx: {
-      mergeProps: true,
-    },
-  },
 })
