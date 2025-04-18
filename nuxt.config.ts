@@ -15,7 +15,7 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/axios.ts',
     '~/plugins/antd.ts',
-  ],,
+  ],
   vite: {
     vueJsx: {
       mergeProps: true,
