@@ -18,6 +18,7 @@
     "prepare:e2e": "playwright install --with-deps"
   },
   "dependencies": {
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
     "axios": "^1.8.4",
     "nuxt": "^3.16.2",
     "vue": "^3.5.13",

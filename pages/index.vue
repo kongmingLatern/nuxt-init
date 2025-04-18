@@ -1,10 +1,12 @@
-<script setup lang="ts">
+<script setup lang="tsx">
 import { ref } from 'vue'
 
 const count = ref(0)
+const dom = <a class="color-blue-600">I'm custom jsx element</a>
 </script>
 
 <template>
+  <component :is="dom" />
   <div class="min-h-screen bg-gray-100 py-10 px-5">
     <div class="container mx-auto max-w-3xl">
       <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">

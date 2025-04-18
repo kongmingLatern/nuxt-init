@@ -5,4 +5,9 @@ export default defineNuxtConfig({
   modules: [
     '@unocss/nuxt',
   ],
+  vite: {
+    vueJsx: {
+      mergeProps: true,
+    },
+  },
 })
