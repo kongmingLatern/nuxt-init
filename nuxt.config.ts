@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: [
-    '@unocss/nuxt',
+    '@unocss/nuxt',,
     '@ant-design-vue/nuxt',
   ],
   css: [
@@ -15,5 +15,10 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/axios.ts',
     '~/plugins/antd.ts',
-  ],
+  ],,
+  vite: {
+    vueJsx: {
+      mergeProps: true,
+    },
+  },
 })

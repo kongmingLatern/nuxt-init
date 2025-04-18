@@ -18,6 +18,7 @@
     "prepare:e2e": "playwright install --with-deps"
   },
   "dependencies": {
+    "@vitejs/plugin-vue-jsx": "^4.1.2",
     "@ant-design-vue/nuxt": "^1.4.6",
     "@ant-design/icons-vue": "^7.0.1",
     "ant-design-vue": "4.x",
