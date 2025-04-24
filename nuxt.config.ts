@@ -3,8 +3,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   modules: [
-    '@unocss/nuxt',,
+    '@unocss/nuxt',
     '@ant-design-vue/nuxt',
+    '@pinia/nuxt',
   ],
   css: [
     'ant-design-vue/dist/reset.css',
