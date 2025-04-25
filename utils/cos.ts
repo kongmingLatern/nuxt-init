@@ -3,10 +3,10 @@ import COS from 'cos-js-sdk-v5'
 // Tencent Cloud COS configuration
 // In a real application, these values should be stored securely in environment variables
 export const COS_CONFIG = {
-  SecretId: 'AKIDqVxA8vfDh6I6kALxMWSAdu53mNktmRs3', // Replace with your Tencent Cloud SecretId
-  SecretKey: '6xazA5mERP8dtufCVaQ1OYTAdrqa5MOA', // Replace with your Tencent Cloud SecretKey
-  Bucket: 'zmgs-1306001379', // Replace with your COS bucket name
-  Region: 'ap-nanjing', // Replace with your COS bucket region
+  SecretId: '', // Replace with your Tencent Cloud SecretId
+  SecretKey: '', // Replace with your Tencent Cloud SecretKey
+  Bucket: '', // Replace with your COS bucket name
+  Region: '', // Replace with your COS bucket region
 }
 
 // Initialize COS SDK instance
