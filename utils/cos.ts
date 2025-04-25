@@ -2,7 +2,7 @@ import COS from 'cos-js-sdk-v5'
 
 // Tencent Cloud COS configuration
 // In a real application, these values should be stored securely in environment variables
-const COS_CONFIG = {
+export const COS_CONFIG = {
   SecretId: 'AKIDqVxA8vfDh6I6kALxMWSAdu53mNktmRs3', // Replace with your Tencent Cloud SecretId
   SecretKey: '6xazA5mERP8dtufCVaQ1OYTAdrqa5MOA', // Replace with your Tencent Cloud SecretKey
   Bucket: 'zmgs-1306001379', // Replace with your COS bucket name
@@ -23,7 +23,7 @@ export function getCosInstance(): COS {
 }
 
 // Upload file to COS
-export async function uploadFile(file: File): Promise<string> {
+export async function uploadFile(file: File, onProgress?: (percent: number, loaded: number) => void): Promise<string> {
   return new Promise((resolve, reject) => {
     const cos = getCosInstance()
     const key = `${Date.now()}-${file.name}` // Create a unique file key
@@ -34,6 +34,11 @@ export async function uploadFile(file: File): Promise<string> {
       Key: key,
       Body: file,
       onProgress: function(progressData) {
+        if (onProgress) {
+          const percent = Math.floor(progressData.percent * 100)
+          const loaded = progressData.loaded
+          onProgress(percent, loaded)
+        }
         console.log(progressData)
       }
     }, function(err, data) {
@@ -65,7 +70,7 @@ export async function listFiles(): Promise<Array<{ Key: string, LastModified: st
         const files = (data.Contents || []).map(item => ({
           Key: item.Key,
           LastModified: item.LastModified,
-          Size: item.Size,
+          Size: Number(item.Size), // Ensure Size is a number
           Url: `https://${COS_CONFIG.Bucket}.cos.${COS_CONFIG.Region}.myqcloud.com/${item.Key}`
         }))
         resolve(files)
