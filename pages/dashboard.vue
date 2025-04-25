@@ -134,7 +134,10 @@ const handleDownload = (key: string, filename: string) => {
 
 // Extract filename from key
 const getFileName = (key: string) => {
-  return key.split('/').pop() || key
+  // 截取第一个-后面的全部字符
+  const [, ...rest] = key.split('-')
+  return rest.join('.')|| key
+  // return key.split('-')[1].replace(/\s+/g, '') || key
 }
 
 // Handle logout
