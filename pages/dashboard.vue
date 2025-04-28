@@ -2,17 +2,15 @@
 import {
   DeleteOutlined,
   DownloadOutlined,
-  EditOutlined,
   LogoutOutlined,
   ReloadOutlined,
-  SearchOutlined,
   UploadOutlined,
 } from '@ant-design/icons-vue'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/auth'
 import { useFileStore } from '~/stores/files'
-import { deleteFile, getFileUrl, listFiles, uploadFile } from '~/utils/cos'
+import { getFileUrl } from '~/utils/fileApi'
 
 const authStore = useAuthStore()
 const fileStore = useFileStore()
@@ -28,27 +26,29 @@ const uploadLoading = ref(false)
 const fileList = ref([])
 const message = ref('')
 const messageType = ref('info')
-const searchText = ref('')
-const editingNote = ref(null)
-const modalVisible = ref(false)
 
 // Define table columns
 const columns = [
   {
+    title: '序号',
+    dataIndex: 'index',
+    key: 'index',
+  },
+  {
     title: '文件名',
-    dataIndex: 'Key',
-    key: 'key',
+    dataIndex: 'originalname',
+    key: 'originalname',
   },
   {
     title: '大小',
     key: 'size',
-    customRender: ({ record }) => formatSize(record.Size),
+    customRender: ({ record }) => formatSize(record.size),
   },
   {
     title: '修改时间',
-    key: 'date',
+    key: 'createdAt',
     align: 'center',
-    customRender: ({ record }) => formatDate(record.LastModified),
+    customRender: ({ record }) => formatDate(record.createdAt),
   },
   {
     title: '操作',
@@ -56,12 +56,6 @@ const columns = [
     align: 'center',
   },
 ]
-
-// Filter files based on search text
-const filteredFiles = computed(() => {
-  const files = fileStore.getFilesByNote(searchText.value)
-  return [...files].sort((a, b) => new Date(b.LastModified).getTime() - new Date(a.LastModified).getTime())
-})
 
 // Load file list on component mount
 onMounted(async () => {
@@ -115,6 +109,8 @@ async function handleUpload(info) {
 
 // Format bytes to human-readable size
 function formatSize(bytes) {
+  console.log('formatSize', bytes)
+
   if (bytes === 0)
     return '0 Bytes'
 
@@ -139,6 +135,7 @@ async function handleDelete(key) {
     await fileStore.deleteFile(key)
     message.value = '文件删除成功'
     messageType.value = 'success'
+    await fileStore.fetchFiles()
   }
   catch (error) {
     console.error('Delete error:', error)
@@ -151,11 +148,11 @@ async function handleDelete(key) {
 }
 
 // Handle file download
-function handleDownload(key, filename) {
-  const url = getFileUrl(key)
+function handleDownload(filename) {
+  const url = getFileUrl(filename)
   const link = document.createElement('a')
   link.href = url
-  link.setAttribute('download', filename || key)
+  link.setAttribute('download', getFileName(filename))
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -164,36 +161,13 @@ function handleDownload(key, filename) {
 // Extract filename from key
 function getFileName(key) {
   const [, ...rest] = key.split('-')
-  return rest.join('.') || key
+  return rest.join('-') || key
 }
 
 // Handle logout
 function handleLogout() {
   authStore.logout()
   router.push('/login')
-}
-
-// Edit note for a file
-function openEditNote(key, currentNote) {
-  editingNote.value = { key, note: currentNote || '' }
-  modalVisible.value = true
-}
-
-// Save note for a file
-function saveNote() {
-  if (editingNote.value) {
-    fileStore.saveFileNote(
-      editingNote.value.key,
-      editingNote.value.note,
-    )
-    editingNote.value = null
-    modalVisible.value = false
-  }
-}
-
-// Clear search
-function clearSearch() {
-  searchText.value = ''
 }
 
 // Format speed with units
@@ -270,60 +244,32 @@ function formatSpeed(speed) {
                   </template>
                 </a-button>
               </div>
-
-              <!-- Search Component -->
-              <!-- <div class="flex items-center">
-                <a-input-search
-                  v-model:value="searchText"
-                  placeholder="搜索文件备注"
-                  style="width: 200px"
-                  @search="() => {}"
-                >
-                  <template #prefix>
-                    <SearchOutlined />
-                  </template>
-                </a-input-search>
-                <a-button v-if="searchText" type="link" @click="clearSearch">
-                  清除
-                </a-button>
-              </div>
-            </div> -->
             </div>
           </template>
 
           <a-alert v-if="message" :message="message" :type="messageType" show-icon class="mb-4" />
 
           <a-table
-            :columns="columns" :data-source="filteredFiles" :loading="loading" :pagination="{ pageSize: 10 }"
+            :columns="columns" :data-source="fileStore.files" :loading="loading" :pagination="{ pageSize: 10 }"
             :row-key="record => record.Key"
           >
             <template #bodyCell="{ column, record }">
-              <template v-if="column.key === 'key'">
-                {{ getFileName(record.Key) }}
-              </template>
-              <template v-if="column.key === 'note'">
-                <div>{{ record.note || '-' }}</div>
+              <template v-if="column.key === 'originalname'">
+                {{ getFileName(record.originalname) }}
               </template>
               <template v-if="column.key === 'action'">
                 <a-space>
-                  <a-button type="primary" @click="handleDownload(record.Key, getFileName(record.Key))">
+                  <a-button type="primary" @click="handleDownload(record.originalname)">
                     <template #icon>
                       <DownloadOutlined />
                     </template>
                     下载
                   </a-button>
-
-                  <!-- <a-button type="primary" danger @click="handleDelete(record.Key)">
-                    <template #icon>
-                      <DeleteOutlined />
-                    </template>
-                    删除
-                  </a-button> -->
                   <a-popconfirm
                     title="是否删除该文件？"
                     ok-text="确定"
                     cancel-text="取消"
-                    @confirm="handleDelete(record.Key)"
+                    @confirm="handleDelete(record.originalname)"
                   >
                     <a-button danger>
                       <template #icon>
@@ -339,21 +285,5 @@ function formatSpeed(speed) {
         </a-card>
       </a-layout-content>
     </a-layout>
-
-    <!-- Note Edit Modal -->
-    <a-modal
-      v-model:visible="modalVisible"
-      title="编辑文件备注"
-      ok-text="保存"
-      cancel-text="取消"
-      @ok="saveNote"
-    >
-      <a-textarea
-        v-if="editingNote"
-        v-model:value="editingNote.note"
-        placeholder="输入文件备注"
-        :rows="4"
-      />
-    </a-modal>
   </div>
 </template>

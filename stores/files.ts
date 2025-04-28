@@ -1,15 +1,6 @@
 import { defineStore } from 'pinia'
-import { uploadFile as cosUploadFile, listFiles as cosListFiles, deleteFile as cosDeleteFile, getFileUrl, getCosInstance, COS_CONFIG } from '~/utils/cos'
-import COS from 'cos-js-sdk-v5'
-
-export interface FileItem {
-  Key: string
-  LastModified: string
-  Size: number
-  Url: string
-  note?: string
-  uploadProgress?: number
-}
+import { uploadFile, listFiles, deleteFile, getFileUrl } from '~/utils/fileApi'
+import type { FileItem } from '~/utils/fileApi'
 
 interface UploadingFile {
   id: string
@@ -42,7 +33,7 @@ export const useFileStore = defineStore('files', {
     async fetchFiles() {
       this.loading = true
       try {
-        const files = await cosListFiles()
+        const files = await listFiles()
         
         // Retrieve notes from localStorage
         const savedNotes = localStorage.getItem('fileNotes')
@@ -76,8 +67,8 @@ export const useFileStore = defineStore('files', {
       this.uploadingFiles.push(uploadingFile)
       
       try {
-        // Use the cosUploadFile function with a progress callback
-        const url = await cosUploadFile(file, (progress, loaded) => {
+        // Use the uploadFile function with a progress callback
+        const url = await uploadFile(file, (progress, loaded) => {
           // Update progress and calculate speed
           const index = this.uploadingFiles.findIndex(f => f.id === uploadId)
           if (index !== -1) {
@@ -116,7 +107,7 @@ export const useFileStore = defineStore('files', {
     
     async deleteFile(key: string) {
       try {
-        await cosDeleteFile(key)
+        await deleteFile(key)
         
         // Also remove the note if it exists
         const savedNotes = localStorage.getItem('fileNotes')
